@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Energie Visualisierung</title> <!-- Shortened Title -->
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 25px; background-color: #f0f2f5; color: #1c1e21; line-height: 1.6; }
+        h1, h2 { color: #333; text-align: center; margin-bottom: 20px; font-weight: 600; }
+        h1 { font-size: 1.8em; margin-bottom: 15px;}
+        h2 { font-size: 1.5em; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 5px;}
+        .container { max-width: 1200px; margin: 0 auto; background-color: #ffffff; padding: 20px 30px 30px 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+        .controls-container { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 30px; padding: 15px; background-color: #e9ecef; border-radius: 6px; }
+        .week-selector-form { display: inline-flex; align-items: center; margin: 5px 15px 5px 0; }
+        .week-selector-form label { margin-right: 10px; font-weight: 500; }
+        .week-selector-form select { padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; min-width: 150px; margin-right: 10px; }
+        .week-selector-form button { padding: 8px 18px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
+        .week-selector-form button:hover { background-color: #0056b3; }
+        .report-button { display: inline-block; padding: 8px 18px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; text-decoration: none; transition: background-color 0.2s; margin: 5px 0 5px 15px; }
+        .report-button:hover { background-color: #218838; color: white; }
+        .weekly-summary-plot { /* Style for the weekly plot container */
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #fdfdfe; /* Slightly off-white */
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+        }
+        .weekly-summary-plot img {
+             max-width: 100%;
+             height: auto;
+             display: block;
+             margin: 10px auto 0 auto; /* Center image */
+             border: 1px solid #d1d5da;
+             border-radius: 4px;
+             background-color: #fff;
+        }
+        .day-list { list-style-type: none; padding: 0; margin-top: 20px;} /* Added margin */
+        .day-item { margin-bottom: 40px; padding: 25px; background-color: #f7f8fa; border-radius: 6px; border: 1px solid #e1e4e8; }
+        .day-header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;}
+        .day-link { color: #0056b3; text-decoration: none; font-weight: bold; font-size: 1.4em; margin-bottom: 8px; display: block; flex-basis: 100%; /* Take full width on small screens */ }
+        @media (min-width: 600px) { .day-link { flex-basis: auto; margin-right: 20px; margin-bottom: 0;} } /* Adjust layout on larger screens */
+        .day-link:hover { text-decoration: underline; color: #003d80; }
+        .day-summary { font-size: 0.90em; color: #444; background-color: #e9ecef; padding: 8px 12px; border-radius: 4px; flex-grow: 1; /* Allow summary to take space */ min-width: 250px;}
+        .summary-line { margin-bottom: 3px; }
+        .summary-label { font-weight: 600; min-width: 45px; display: inline-block; margin-right: 5px;}
+        .day-item img { /* Specific styling for daily plot images */
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 15px;
+            border: 1px solid #d1d5da;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .no-data, .no-week-selected { text-align: center; font-style: italic; color: #555; margin-top: 40px; padding: 20px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; color: #721c24;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Energie Visualisierung</h1>
+
+        <!-- Controls Container -->
+        <div class="controls-container">
+            <!-- Week Selector Form -->
+            <form method="GET" action="/" class="week-selector-form">
+                <label for="kw_select">Woche:</label>
+                <select name="kw" id="kw_select">
+                    {% if not available_kws %}
+                        <option value="">Keine Daten</option>
+                    {% else %}
+                        {% for kw in available_kws %}
+                            <option value="{{ kw }}" {% if kw == selected_kw %}selected{% endif %}>
+                                KW {{ kw.split('-')[1] }}, {{ kw.split('-')[0] }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <button type="submit">Anzeigen</button>
+            </form>
+
+            <!-- Download Report Button/Link -->
+            {% if selected_kw and daily_summaries %} {# Only show if week selected AND data exists #}
+                <a href="/report/week/{{ selected_kw }}" download class="report-button">
+                    Tagesbericht KW {{ selected_kw.split('-')[1] }} <span style="font-size:0.8em;">(Download)</span>
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- *** NEW: Display Area for Weekly Summary Plot *** -->
+        {% if weekly_plot_base64 %}
+            <div class="weekly-summary-plot">
+                <h2>Wochenübersicht Kosten</h2>
+                <img src="data:image/png;base64,{{ weekly_plot_base64 }}" alt="Wöchentliche Kostenübersicht für KW {{ selected_kw.split('-')[1] if selected_kw else '' }}">
+            </div>
+        {% elif selected_kw and not daily_summaries %}
+             {# Message if week selected but no data found for it - handled below too #}
+        {% elif not selected_kw and available_kws %}
+             {# Message if data available but no week selected yet #}
+             <p class="no-week-selected">Bitte wählen Sie oben eine Kalenderwoche aus, um die Daten anzuzeigen.</p>
+        {% endif %}
+
+
+        <!-- Display Area for Daily Data -->
+        {% if not available_kws %}
+             <p class="no-data">Keine Daten gefunden. Bitte überprüfen Sie die CSV-Dateien.</p>
+        {% elif not selected_kw %}
+             {# Message already shown above if needed #}
+        {% elif not daily_summaries %}
+             <p class="no-data">Keine Daten für die ausgewählte Woche ({{ selected_kw }}) gefunden.</p>
+        {% else %}
+            <h2>Tägliche Kosten (Strom & Gas) - KW {{ selected_kw.split('-')[1] }}</h2>
+            <ul class="day-list">
+                {% for summary in daily_summaries %}
+                <li class="day-item">
+                    <div class="day-header">
+                        {# Link to the anchor ID (created implicitly by browser or manually) #}
+                        <a class="day-link" href="#{{ summary.day }}">
+                            {{ summary.weekday }}, {{ summary.day }}
+                        </a>
+                        <div class="day-summary">
+                             <div class="summary-line"><span class="summary-label">Strom:</span> {{ '%.2f'|format(summary.total_elec_kwh) }} kWh / <strong>{{ '%.2f €'|format(summary.total_elec_cost) }}</strong></div>
+                             <div class="summary-line"><span class="summary-label">Gas:</span> {{ '%.2f'|format(summary.total_gas_kwh) }} kWh / <strong>{{ '%.2f €'|format(summary.total_gas_cost) }}</strong></div>
+                        </div>
+                    </div>
+                    {# Individual daily plot image - generated by the /plot/combined/<day> route #}
+                    {# Added id attribute to the image's parent or the image itself if needed for anchor link #}
+                    <div id="{{ summary.day }}"> {# Anchor target ID #}
+                        <img src="/plot/combined/{{ summary.day }}" alt="Energiekosten am {{ summary.day }}">
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>

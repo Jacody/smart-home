@@ -1,0 +1,16 @@
+#ifndef ENVIRONMENT_H
+#define ENVIRONMENT_H
+
+// Diese Datei enthält Platzhalter für sensible Zugangsdaten.
+// Kopiere diese Datei als environment.h und fülle die echten Daten ein.
+
+// WLAN Zugangsdaten
+#define WIFI_SSID "DEIN_WLAN_SSID"
+#define WIFI_PASSWORD "DEIN_WLAN_PASSWORT" 
+
+// Server-URL für die Kamerabilder
+#define SERVER_URL "http://DEINE_SERVER_IP:5000/api/camera"
+
+// Andere sensible Daten hier hinzufügen
+
+#endif // ENVIRONMENT_H 

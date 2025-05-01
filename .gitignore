@@ -1,0 +1,62 @@
+# Umgebungsvariablen
+.env
+
+# ESP-Konfigurationsdateien mit sensiblen Daten
+gas-esp/src/environment.h
+electricity-esp/src/config.h
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Virtuelle Umgebungen
+.env
+.venv
+venv/
+ENV/
+env/
+
+# IDE-Dateien
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Projektspezifische Dateien
+camera_images/
+cache/
+data_gas.csv
+electricity_data.csv
+stromzaehler_log.csv
+hourly_counts.csv
+gas_hourly.csv
+*.png
+*.jpg
+*.jpeg
+
+# Log-Dateien
+*.log 

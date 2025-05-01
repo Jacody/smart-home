@@ -1,0 +1,4 @@
+bblanchon/ArduinoJson@6.21.5
+adafruit/DHT sensor library@^1.4.6
+adafruit/Adafruit Unified Sensor@^1.1.15
+esp32-camera
