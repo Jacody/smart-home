@@ -1,70 +1,70 @@
 # Smart Home Monitoring System
 
-Dieses Projekt überwacht und visualisiert Gas- und Stromverbrauchsdaten und erstellt Berichte.
+This project monitors and visualizes gas and electricity consumption data and generates reports.
 
-## Funktionsweise
+## How it works
 
-1. **ESP32-Kamera** nimmt Bilder vom Gaszähler auf und sendet diese mit Sensordaten an den Server
-2. **Stromzähler-ESP** erfasst Stromverbrauchsdaten und sendet diese an den Server
-3. **Server** (server.py) empfängt und speichert alle Daten
-4. **Bildauswertung** (image_evaluator.py) extrahiert Zählerwerte aus den Bildern
-5. **Visualisierungstools** erstellen Grafiken und Berichte zum Energieverbrauch
+1. **ESP32 camera** takes images of the gas meter and sends them with sensor data to the server
+2. **Electricity meter ESP** captures electricity consumption data and sends it to the server
+3. **Server** (server.py) receives and stores all data
+4. **Image evaluation** (image_evaluator.py) extracts meter readings from the images
+5. **Visualization tools** create graphics and reports on energy consumption
 
-## Einrichtung für öffentliche Nutzung
+## Setup for public use
 
-### 1. Umgebungsvariablen konfigurieren
+### 1. Configure environment variables
 
-1. Kopiere die `.env.example` Datei und benenne sie in `.env` um:
+1. Copy the `.env.example` file and rename it to `.env`:
    ```bash
    cp .env.example .env
    ```
 
-2. Bearbeite die `.env` Datei und füge deine persönlichen Konfigurationsdaten ein:
+2. Edit the `.env` file and add your personal configuration data:
    ```
-   # Ersetze diese Werte mit deinen eigenen Daten
-   TELEGRAM_BOT_TOKEN="DEIN_BOT_TOKEN_HIER_EINFUEGEN"
-   TELEGRAM_CHAT_ID="DEINE_GRUPPEN_CHAT_ID_HIER_EINFUEGEN"
+   # Replace these values with your own data
+   TELEGRAM_BOT_TOKEN="INSERT_YOUR_BOT_TOKEN_HERE"
+   TELEGRAM_CHAT_ID="INSERT_YOUR_GROUP_CHAT_ID_HERE"
    ELECTRICITY_ESP_IP="192.168.178.XXX"
    ```
 
-### 2. ESP32-Konfigurationsdateien einrichten
+### 2. Set up ESP32 configuration files
 
-#### Gaszähler-ESP32 (mit Kamera)
-1. Kopiere die Beispiel-Konfigurationsdatei und erstelle deine eigene:
+#### Gas meter ESP32 (with camera)
+1. Copy the example configuration file and create your own:
    ```bash
    cp gas-esp/src/environment.h.example gas-esp/src/environment.h
    ```
-2. Bearbeite `gas-esp/src/environment.h` und passe die WLAN-Zugangsdaten und Server-URL an:
+2. Edit `gas-esp/src/environment.h` and adjust the WiFi credentials and server URL:
    ```cpp
-   #define WIFI_SSID "DEIN_WLAN_SSID"
-   #define WIFI_PASSWORD "DEIN_WLAN_PASSWORT"
-   #define SERVER_URL "http://DEINE_SERVER_IP:5000/api/camera"
+   #define WIFI_SSID "YOUR_WIFI_SSID"
+   #define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+   #define SERVER_URL "http://YOUR_SERVER_IP:5000/api/camera"
    ```
 
-#### Stromzähler-ESP32
-1. Kopiere die Beispiel-Konfigurationsdatei und erstelle deine eigene:
+#### Electricity meter ESP32
+1. Copy the example configuration file and create your own:
    ```bash
    cp electricity-esp/src/config.h.example electricity-esp/src/config.h
    ```
-2. Bearbeite `electricity-esp/src/config.h` und passe die WLAN-Zugangsdaten und Server-URL an:
+2. Edit `electricity-esp/src/config.h` and adjust the WiFi credentials and server URL:
    ```cpp
-   const char* ssid = "DEIN_WLAN_SSID";
-   const char* password = "DEIN_WLAN_PASSWORT";
-   const char* serverUrl = "http://DEINE_SERVER_IP:5000/upload";
+   const char* ssid = "YOUR_WIFI_SSID";
+   const char* password = "YOUR_WIFI_PASSWORD";
+   const char* serverUrl = "http://YOUR_SERVER_IP:5000/upload";
    ```
 
-### 3. Abhängigkeiten installieren
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Tesseract OCR installieren (für Bildauswertung)
+### 4. Install Tesseract OCR (for image evaluation)
 
 #### Windows
-1. Download von https://github.com/UB-Mannheim/tesseract/wiki
-2. Installation ausführen
-3. Pfad in `image_evaluator.py` prüfen: `pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'`
+1. Download from https://github.com/UB-Mannheim/tesseract/wiki
+2. Run the installation
+3. Check the path in `image_evaluator.py`: `pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'`
 
 #### macOS
 ```
@@ -77,78 +77,78 @@ sudo apt update
 sudo apt install tesseract-ocr
 ```
 
-## Wichtige Dateien
+## Important files
 
-- `server.py`: Hauptserver zum Empfang aller Daten
-- `image_evaluator.py`: Bildauswertung mit OCR für den Gaszähler
-- `electricity-esp/stromzaehler_logger.py`: Logger für den Stromzähler
-- `combined_visualizer.py`: Kombinierte Visualisierung von Gas- und Stromverbrauch
-- `sende_bericht.py`: Sendet Berichte via Telegram
+- `server.py`: Main server for receiving all data
+- `image_evaluator.py`: Image evaluation with OCR for the gas meter
+- `electricity-esp/stromzaehler_logger.py`: Logger for the electricity meter
+- `combined_visualizer.py`: Combined visualization of gas and electricity consumption
+- `sende_bericht.py`: Sends reports via Telegram
 
-## Verwendung
+## Usage
 
-### Server starten
+### Start the server
 
 ```bash
 python server.py
 ```
 
-### Visualisierung starten
+### Start the visualization
 
 ```bash
 python combined_visualizer.py
 ```
 
-### Bericht senden
+### Send a report
 
 ```bash
 python sende_bericht.py
 ```
 
-## Umgebungsvariablen
+## Environment variables
 
-Die folgende Tabelle zeigt alle verfügbaren Konfigurationsparameter in der `.env`-Datei:
+The following table shows all available configuration parameters in the `.env` file:
 
-| Variable | Beschreibung | Standardwert |
+| Variable | Description | Default value |
 |----------|--------------|--------------|
-| TELEGRAM_BOT_TOKEN | Telegram-Bot-Token | - |
-| TELEGRAM_CHAT_ID | Telegram-Chat-ID für Berichte | - |
-| TELEGRAM_DATEINAME | Dateiname für Telegram-Berichte | Wochenbericht_Energie_KW_JAHR_WOCHE.png |
-| ELECTRICITY_ESP_IP | IP-Adresse des Strom-ESP | 192.168.178.157 |
-| ELECTRICITY_POLL_INTERVAL_SECONDS | Abfrageintervall in Sekunden | 0.5 |
-| ELECTRICITY_ROTATIONS_PER_KWH | Umdrehungen pro kWh | 75 |
-| ELECTRICITY_COST_PER_KWH_EURO | Stromkosten pro kWh in Euro | 0.4017 |
-| SERVER_PORT | Server-Port | 5000 |
-| PORT_NUMBER | Port für Visualisierungen | 5001 |
-| ESP_WIFI_SSID | WLAN-SSID für die ESP32-Geräte | - |
-| ESP_WIFI_PASSWORD | WLAN-Passwort für die ESP32-Geräte | - |
-| ESP_GAS_SERVER_URL | Server-URL für den Gaszähler | - |
-| ESP_ELECTRICITY_SERVER_URL | Server-URL für den Stromzähler | - |
+| TELEGRAM_BOT_TOKEN | Telegram bot token | - |
+| TELEGRAM_CHAT_ID | Telegram chat ID for reports | - |
+| TELEGRAM_DATEINAME | Filename for Telegram reports | Wochenbericht_Energie_KW_JAHR_WOCHE.png |
+| ELECTRICITY_ESP_IP | IP address of the electricity ESP | 192.168.178.157 |
+| ELECTRICITY_POLL_INTERVAL_SECONDS | Poll interval in seconds | 0.5 |
+| ELECTRICITY_ROTATIONS_PER_KWH | Rotations per kWh | 75 |
+| ELECTRICITY_COST_PER_KWH_EURO | Electricity cost per kWh in euros | 0.4017 |
+| SERVER_PORT | Server port | 5000 |
+| PORT_NUMBER | Port for visualizations | 5001 |
+| ESP_WIFI_SSID | WiFi SSID for the ESP32 devices | - |
+| ESP_WIFI_PASSWORD | WiFi password for the ESP32 devices | - |
+| ESP_GAS_SERVER_URL | Server URL for the gas meter | - |
+| ESP_ELECTRICITY_SERVER_URL | Server URL for the electricity meter | - |
 
-## Hinweis zur Sicherheit
+## Security note
 
-Alle sensiblen Daten werden in separaten Konfigurationsdateien gespeichert, die nicht im Repository enthalten sind:
+All sensitive data is stored in separate configuration files that are not included in the repository:
 
-1. `.env` - Hauptkonfiguration für den Server und Python-Skripte
-2. `gas-esp/src/environment.h` - Konfiguration für den Gaszähler-ESP32
-3. `electricity-esp/src/config.h` - Konfiguration für den Stromzähler-ESP32
+1. `.env` - Main configuration for the server and Python scripts
+2. `gas-esp/src/environment.h` - Configuration for the gas meter ESP32
+3. `electricity-esp/src/config.h` - Configuration for the electricity meter ESP32
 
-Diese Dateien sind in der `.gitignore` aufgeführt und werden nicht ins Repository hochgeladen. Verwenden Sie die `.example`-Versionen als Vorlagen.
+These files are listed in `.gitignore` and will not be uploaded to the repository. Use the `.example` versions as templates.
 
-## Veröffentlichung auf GitHub
+## Publishing on GitHub
 
-Bei der Veröffentlichung auf GitHub wird durch die `.gitignore` sichergestellt, dass keine sensiblen Daten hochgeladen werden. Folgende Dateien werden ignoriert:
+When publishing on GitHub, `.gitignore` ensures that no sensitive data is uploaded. The following files are ignored:
 
-- `.env` - Enthält API-Keys, Tokens und andere sensible Informationen
-- `gas-esp/src/environment.h` - Enthält WLAN-Zugangsdaten und Server-URLs
-- `electricity-esp/src/config.h` - Enthält WLAN-Zugangsdaten und Server-URLs
+- `.env` - Contains API keys, tokens, and other sensitive information
+- `gas-esp/src/environment.h` - Contains WiFi credentials and server URLs
+- `electricity-esp/src/config.h` - Contains WiFi credentials and server URLs
 
-Vergewissern Sie sich vor dem ersten Push, dass Sie alle sensiblen Daten aus dem Code entfernt und in die entsprechenden Konfigurationsdateien ausgelagert haben.
+Before your first push, make sure you have removed all sensitive data from the code and moved it to the appropriate configuration files.
 
-## Mitwirkung
+## Contributing
 
-1. Forke das Repository
-2. Erstelle einen Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Committe deine Änderungen (`git commit -m 'Add some AmazingFeature'`)
-4. Pushe zum Branch (`git push origin feature/AmazingFeature`)
-5. Öffne einen Pull Request 
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request 
