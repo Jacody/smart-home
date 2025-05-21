@@ -1,6 +1,7 @@
 # Smart Home Monitoring System
 
 This project monitors and visualizes gas and electricity consumption data and generates reports.
+![Bildschirmfoto 2025-05-21 um 07 55 24](https://github.com/user-attachments/assets/dfb38c84-b644-418a-bfb3-2bb9eda7de8f)
 
 ## How it works
 
