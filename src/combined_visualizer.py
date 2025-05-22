@@ -22,10 +22,10 @@ load_dotenv()
 
 # Konfiguration
 PORT_NUMBER = int(os.getenv("PORT_NUMBER", "5001"))
-ELEC_DATA_FILE = os.getenv("ELEC_DATA_FILE", "hourly_counts.csv")
-GAS_DATA_FILE = os.getenv("GAS_DATA_FILE", "gas_hourly.csv")
+ELEC_DATA_FILE = os.getenv("ELEC_DATA_FILE", os.path.join(os.path.dirname(__file__), "hourly_counts.csv"))
+GAS_DATA_FILE = os.getenv("GAS_DATA_FILE", os.path.join(os.path.dirname(__file__), "gas_hourly.csv"))
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates'))
 
 # --- Imports and Configuration (Keep as before) ---
 PLOT_TITLE_FONTSIZE = 14
@@ -45,7 +45,7 @@ except locale.Error:
         print("Warnung: Deutsches Locale für Wochentage konnte nicht gesetzt werden.")
         pass # Keep going with default locale if German fails
 
-TEMPLATE_DIR = 'templates'
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
 if not os.path.exists(TEMPLATE_DIR):
     os.makedirs(TEMPLATE_DIR)
 

@@ -16,7 +16,7 @@ load_dotenv()
 try:
     from image_evaluator import evaluate_image
 except ImportError:
-    print("Warnung: image_evaluator konnte nicht importiert werden. Stelle sicher, dass image_evaluator.py im Hauptverzeichnis liegt.")
+    print("Warnung: image_evaluator konnte nicht importiert werden. Stelle sicher, dass image_evaluator.py im selben Verzeichnis liegt.")
     # Definiere eine Dummy-Funktion für den Fall, dass das Modul nicht importiert werden kann
     def evaluate_image(image_path, csv_path):
         print(f"Hinweis: Bildauswertung nicht verfügbar. Bild {image_path} wurde nicht ausgewertet.")
@@ -26,25 +26,29 @@ except ImportError:
 try:
     import electricity_evaluator
 except ImportError:
-    print("Warnung: electricity_evaluator konnte nicht importiert werden. Stelle sicher, dass electricity_evaluator.py im Hauptverzeichnis liegt.")
+    print("Warnung: electricity_evaluator konnte nicht importiert werden. Stelle sicher, dass electricity_evaluator.py im selben Verzeichnis liegt.")
 
 app = Flask(__name__)
 
+# Basisverzeichnis bestimmen
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
 # Ordner für gespeicherte Bilder erstellen
-UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", "camera_images")
+UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", os.path.join(BASE_DIR, "camera_images"))
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 # CSV-Datei für Sensor-Daten der Kamera
-SENSOR_CSV = os.getenv("SENSOR_CSV", "data_gas.csv")
+SENSOR_CSV = os.getenv("SENSOR_CSV", os.path.join(os.path.dirname(__file__), "data_gas.csv"))
 
 # Verzeichnis für die Umdrehungsdaten erstellen
-if not os.path.exists('data'):
-    os.makedirs('data')
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
 
 # CSV-Dateien für Umdrehungsdaten
-ELECTRICITY_CSV = os.getenv("ELECTRICITY_CSV", "electricity_data.csv")
-ELECTRICITY_METRICS_CSV = os.getenv("ELECTRICITY_METRICS_CSV", "stromzaehler_log.csv")
+ELECTRICITY_CSV = os.getenv("ELECTRICITY_CSV", os.path.join(os.path.dirname(__file__), "electricity_data.csv"))
+ELECTRICITY_METRICS_CSV = os.getenv("ELECTRICITY_METRICS_CSV", os.path.join(DATA_DIR, "stromzaehler_log.csv"))
 
 # CSV-Header erstellen, falls die Datei noch nicht existiert
 if not os.path.exists(SENSOR_CSV):
@@ -74,7 +78,7 @@ else:
 
 def bereinige_alte_dateien():
     """Löscht Dateien, die älter als 240 Stunden sind, aus camera_images und cache."""
-    verzeichnisse = [UPLOAD_FOLDER, 'cache']
+    verzeichnisse = [UPLOAD_FOLDER, os.path.join(BASE_DIR, 'cache')]
     max_alter_sekunden = 864000  # 240 Stunden (10 Tage)
     aktuelle_zeit = time.time()
     geloescht_gesamt = 0
@@ -120,12 +124,12 @@ def aktualisiere_stromverbrauchsdaten():
 @app.route('/upload', methods=['POST'])
 def upload():
     # Verzeichnis für die Daten erstellen, falls es nicht existiert
-    if not os.path.exists('data'):
-        os.makedirs('data')
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
     
     # Aktuellen Zeitstempel für den Dateinamen generieren
     timestamp = int(time.time())
-    filename = f"data/received_{timestamp}.csv"
+    filename = os.path.join(DATA_DIR, f"received_{timestamp}.csv")
     
     # Empfangene Daten speichern
     data = request.data.decode('utf-8')

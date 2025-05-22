@@ -18,8 +18,9 @@ def evaluate_image(image_path, csv_path):
     Returns:
         Erkannter Zahlenwert oder None im Fehlerfall
     """
-    # Cache-Verzeichnis erstellen, falls es nicht existiert
-    cache_dir = 'cache'
+    # Basis- und Cache-Verzeichnis bestimmen
+    base_dir = os.path.dirname(os.path.dirname(__file__))
+    cache_dir = os.path.join(base_dir, 'cache')
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
     

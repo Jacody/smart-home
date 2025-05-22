@@ -39,16 +39,17 @@ WEEKDAY_MAP_DE = {
     4: "Freitag", 5: "Samstag", 6: "Sonntag"
 }
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates'))
 
 # --- Konfiguration ---
-DATA_FILE = os.getenv("GAS_DATA_FILE", "gas_hourly.csv") # Eingabedatei
+DATA_FILE = os.getenv("GAS_DATA_FILE", os.path.join(os.path.dirname(__file__), "gas_hourly.csv")) # Eingabedatei
 PORT_NUMBER = int(os.getenv("PORT_NUMBER", "5001")) # Port für den Webserver
 # --- Ende Konfiguration ---
 
 # Sicherstellen, dass das templates-Verzeichnis existiert
-if not os.path.exists('templates'):
-    os.makedirs('templates')
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
+if not os.path.exists(TEMPLATE_DIR):
+    os.makedirs(TEMPLATE_DIR)
 
 def load_gas_data():
     """Liest die Gas-Daten aus der CSV-Datei und gruppiert sie nach Tagen."""
@@ -280,7 +281,7 @@ index_gas_html_content = '''<!DOCTYPE html>
 </body>
 </html>'''
 
-template_path = os.path.join('templates', 'index_gas.html')
+template_path = os.path.join(TEMPLATE_DIR, 'index_gas.html')
 try:
     with open(template_path, 'w', encoding='utf-8') as f:
         f.write(index_gas_html_content)

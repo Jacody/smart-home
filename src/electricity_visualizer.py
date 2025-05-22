@@ -23,9 +23,9 @@ load_dotenv()
 
 # Konfiguration
 PORT_NUMBER = int(os.getenv("PORT_NUMBER", "5001"))
-DATA_FILE = os.getenv("ELEC_DATA_FILE", "hourly_counts.csv")
+DATA_FILE = os.getenv("ELEC_DATA_FILE", os.path.join(os.path.dirname(__file__), "hourly_counts.csv"))
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates'))
 
 # --- Locale für deutsche Wochentage setzen ---
 try:
@@ -42,8 +42,9 @@ except locale.Error:
 
 
 # Stellen Sie sicher, dass das templates-Verzeichnis existiert
-if not os.path.exists('templates'):
-    os.makedirs('templates')
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
+if not os.path.exists(TEMPLATE_DIR):
+    os.makedirs(TEMPLATE_DIR)
 
 def load_data():
     """Liest die Daten aus der CSV-Datei und gruppiert sie nach Tagen"""
@@ -169,12 +170,8 @@ def plot(day):
     return send_file(img, mimetype='image/png')
 
 # --- HTML-Template wird beim Start erstellt (angepasst) ---
-# Stelle sicher, dass das templates-Verzeichnis existiert
-if not os.path.exists('templates'):
-    os.makedirs('templates')
-
 # --- START DER ÄNDERUNG IM TEMPLATE ---
-with open('templates/index.html', 'w', encoding='utf-8') as f: # UTF-8 für Umlaute
+with open(os.path.join(TEMPLATE_DIR, 'index.html'), 'w', encoding='utf-8') as f: # UTF-8 für Umlaute
     f.write('''<!DOCTYPE html>
 <html lang="de">
 <head>

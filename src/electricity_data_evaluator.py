@@ -1,11 +1,17 @@
 import csv
 from datetime import datetime
 from collections import defaultdict
+import os
+
+# Pfade zu den Dateien
+current_dir = os.path.dirname(__file__)
+input_file = os.path.join(current_dir, 'electricity_data.csv')
+output_file = os.path.join(current_dir, 'hourly_counts.csv')
 
 # Daten einlesen und nach Stunden gruppieren
 timestamp_counts = defaultdict(int)
 
-with open('electricity_data.csv', 'r') as file:
+with open(input_file, 'r') as file:
     reader = csv.reader(file)
     for row in reader:
         if len(row) == 2:  # Prüfen, ob die Zeile zwei Spalten hat
@@ -22,7 +28,7 @@ with open('electricity_data.csv', 'r') as file:
                 continue
 
 # Ergebnisse in eine neue CSV-Datei schreiben
-with open('hourly_counts.csv', 'w', newline='') as output_file:
+with open(output_file, 'w', newline='') as output_file:
     writer = csv.writer(output_file)
     writer.writerow(['Stunde', 'Anzahl', 'Verbrauch', 'Kosten'])
     
@@ -35,4 +41,4 @@ with open('hourly_counts.csv', 'w', newline='') as output_file:
         kosten = verbrauch * 0.41
         writer.writerow([hour, count, f"{verbrauch:.4f}", f"{kosten:.2f} €"])
 
-print("Auswertung abgeschlossen. Ergebnisse wurden in 'hourly_counts.csv' gespeichert.") 
+print(f"Auswertung abgeschlossen. Ergebnisse wurden in '{output_file}' gespeichert.") 

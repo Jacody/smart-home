@@ -8,8 +8,9 @@ def batch_evaluate_images():
     Wertet alle Bilder im camera_images-Ordner aus und aktualisiert die CSV-Datei.
     """
     # Pfade definieren
-    camera_images_dir = 'camera_images'
-    csv_path = 'data_gas.csv'
+    base_dir = os.path.dirname(os.path.dirname(__file__))
+    camera_images_dir = os.path.join(base_dir, 'camera_images')
+    csv_path = os.path.join(os.path.dirname(__file__), 'data_gas.csv')
     
     # Alle Bilddateien im Ordner finden
     image_files = [f for f in os.listdir(camera_images_dir) if f.startswith('cam_') and f.endswith('.jpg')]
