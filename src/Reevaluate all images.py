@@ -10,7 +10,7 @@ def batch_evaluate_images():
     # Pfade definieren
     base_dir = os.path.dirname(os.path.dirname(__file__))
     camera_images_dir = os.path.join(base_dir, 'camera_images')
-    csv_path = os.path.join(os.path.dirname(__file__), 'data_gas.csv')
+    csv_path = os.path.join(os.path.dirname(__file__), 'gas_data.csv')
     
     # Alle Bilddateien im Ordner finden
     image_files = [f for f in os.listdir(camera_images_dir) if f.startswith('cam_') and f.endswith('.jpg')]

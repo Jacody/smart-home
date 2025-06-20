@@ -75,4 +75,4 @@ if __name__ == "__main__":
 
         # Die asynchrone Funktion ausführen
         # --- GEÄNDERTER FUNKTIONSAUFRUF ---
-        asyncio.run(sende_dokument(BOT_TOKEN, CHAT_ID, voller_dateipfad)) # Ruft jetzt sende_dokument auf
+        asyncio.run(sende_dokument(BOT_TOKEN, CHAT_ID, voller_dateipfad)) # Ruft jetzt sende_dokument auf 

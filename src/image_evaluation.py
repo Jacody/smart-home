@@ -47,7 +47,7 @@ def berechne_verbrauch(df):
 # Pfad zu Ihrem Bild
 # !!! ÄNDERN SIE DIES ZU IHREM BILDNAMEN/PFAD !!!
 image_path = os.path.join(os.path.dirname(__file__), 'camera_images/cam_20250430_083816.jpg') # Ersetzen Sie dies mit dem Pfad zu Ihrem Bild
-csv_path = os.path.join(os.path.dirname(__file__), 'data_gas.csv')  # Pfad zur CSV-Datei
+csv_path = os.path.join(os.path.dirname(__file__), 'gas_data.csv')  # Pfad zur CSV-Datei
 cache_dir = 'cache'  # Ordner für Zwischendateien
 
 # Cache-Verzeichnis erstellen, falls es nicht existiert

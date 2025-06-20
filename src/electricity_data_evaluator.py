@@ -6,7 +6,7 @@ import os
 # Pfade zu den Dateien
 current_dir = os.path.dirname(__file__)
 input_file = os.path.join(current_dir, 'electricity_data.csv')
-output_file = os.path.join(current_dir, 'hourly_counts.csv')
+output_file = os.path.join(current_dir, 'electricity_hourly.csv')
 
 # Daten einlesen und nach Stunden gruppieren
 timestamp_counts = defaultdict(int)

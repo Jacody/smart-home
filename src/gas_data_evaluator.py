@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 # --- Konfiguration ---
-input_csv_file = 'data_gas.csv'
+input_csv_file = 'gas_data.csv'
 output_csv_file = 'gas_hourly.csv'
 timestamp_column = 'Timestamp'
 meter_reading_column = 'Number'

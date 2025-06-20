@@ -89,7 +89,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    csv_path = args.csv or os.path.join(os.path.dirname(__file__), 'data_gas.csv')
+    csv_path = args.csv or os.path.join(os.path.dirname(__file__), 'gas_data.csv')
     
     if os.path.exists(csv_path):
         print(f"Verarbeite CSV-Datei: {csv_path}")

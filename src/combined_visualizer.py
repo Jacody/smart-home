@@ -22,7 +22,7 @@ load_dotenv()
 
 # Konfiguration
 PORT_NUMBER = int(os.getenv("PORT_NUMBER", "5001"))
-ELEC_DATA_FILE = os.getenv("ELEC_DATA_FILE", os.path.join(os.path.dirname(__file__), "hourly_counts.csv"))
+ELEC_DATA_FILE = os.getenv("ELEC_DATA_FILE", os.path.join(os.path.dirname(__file__), "electricity_hourly.csv"))
 GAS_DATA_FILE = os.getenv("GAS_DATA_FILE", os.path.join(os.path.dirname(__file__), "gas_hourly.csv"))
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates'))

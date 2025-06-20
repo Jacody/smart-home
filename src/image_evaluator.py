@@ -426,7 +426,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     image_path = args.image or os.path.join(os.path.dirname(__file__), 'camera_images/cam_20250414_124517.jpg')
-    csv_path = args.csv or os.path.join(os.path.dirname(__file__), 'data_gas.csv')
+    csv_path = args.csv or os.path.join(os.path.dirname(__file__), 'gas_data.csv')
     
     result = evaluate_image(image_path, csv_path)
     if result:

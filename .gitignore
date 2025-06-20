@@ -5,6 +5,9 @@
 gas-esp/src/environment.h
 electricity-esp/src/config.h
 
+# Datenordner
+data/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -49,10 +52,10 @@ env/
 # Projektspezifische Dateien
 camera_images/
 cache/
-data_gas.csv
+gas_data.csv
 electricity_data.csv
 stromzaehler_log.csv
-hourly_counts.csv
+electricity_hourly.csv
 gas_hourly.csv
 *.png
 *.jpg

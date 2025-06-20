@@ -11,6 +11,41 @@ This project monitors and visualizes gas and electricity consumption data and ge
 4. **Image evaluation** (image_evaluator.py) extracts meter readings from the images
 5. **Visualization tools** create graphics and reports on energy consumption
 
+## Data Flow
+
+### Electricity Consumption Data Flow
+```
+electricity_data.csv (impulse data)
+    ↓
+electricity_data_evaluator.py (processing)
+    ↓
+electricity_hourly.csv (hourly data)
+    ↓
+electricity_visualizer.py (visualization)
+```
+
+### Gas Meter Data Flow
+```
+Camera images (gas meter)
+    ↓
+image_evaluator.py / image_evaluation.py (OCR)
+    ↓
+gas_data.csv (detected meter readings)
+    ↓
+gas_data_evaluator.py (processing)
+    ↓
+gas_hourly.csv (processed data)
+    ↓
+gas_visualizer.py (visualization)
+```
+
+### Reporting Data Flow
+```
+combined_visualizer
+    ↓
+send_report.py (send report)
+```
+
 ## Setup for public use
 
 ### 1. Configure environment variables
@@ -84,7 +119,7 @@ sudo apt install tesseract-ocr
 - `image_evaluator.py`: Image evaluation with OCR for the gas meter
 - `electricity-esp/stromzaehler_logger.py`: Logger for the electricity meter
 - `combined_visualizer.py`: Combined visualization of gas and electricity consumption
-- `sende_bericht.py`: Sends reports via Telegram
+- `send_report.py`: Sends reports via Telegram
 
 ## Usage
 
@@ -103,7 +138,7 @@ python combined_visualizer.py
 ### Send a report
 
 ```bash
-python sende_bericht.py
+python send_report.py
 ```
 
 ## Environment variables

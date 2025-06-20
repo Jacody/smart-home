@@ -39,7 +39,7 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 # CSV-Datei für Sensor-Daten der Kamera
-SENSOR_CSV = os.getenv("SENSOR_CSV", os.path.join(os.path.dirname(__file__), "data_gas.csv"))
+SENSOR_CSV = os.getenv("SENSOR_CSV", os.path.join(os.path.dirname(__file__), "gas_data.csv"))
 
 # Verzeichnis für die Umdrehungsdaten erstellen
 DATA_DIR = os.path.join(BASE_DIR, 'data')
