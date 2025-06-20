@@ -7,9 +7,10 @@ This project monitors and visualizes gas and electricity consumption data and ge
 
 1. **ESP32 camera** takes images of the gas meter and sends them with sensor data to the server
 2. **Electricity meter ESP** captures electricity consumption data and sends it to the server
+   - Detects Ferraris disk rotations with timestamps
+   - Sends rotation data to server for processing
 3. **Server** (server.py) receives and stores all data
-4. **Image evaluation** (image_evaluator.py) extracts meter readings from the images
-5. **Visualization tools** create graphics and reports on energy consumption
+4. **Visualization tools** create graphics and reports on energy consumption
 
 ## Data Flow
 
